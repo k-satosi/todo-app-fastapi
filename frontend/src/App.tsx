@@ -51,26 +51,42 @@ const App: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo.id}>
-            <span
-              style={{ textDecoration: todo.completed ? "line-through" : "none", cursor: "pointer" }}
-              onClick={() => toggleComplete(todo.id, todo.completed)}
-            >
-              {todo.title}
-            </span>
-            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <input
-        value={newTodo}
-        onChange={e => setNewTodo(e.target.value)}
-      />
-      <button onClick={addTodo}>Add Todo</button>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-5">
+      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Todo List</h1>
+        <ul className="space-y-2">
+          {todos.map(todo => (
+            <li key={todo.id} className="flex justify-between item-center bg-gray-50 p-2 rounded-lg">
+              <span
+                className={`text-lg ${todo.completed ? "line-through text-gray-400" : "text-gray-800"} cursor-pointer`}
+                onClick={() => toggleComplete(todo.id, todo.completed)}
+              >
+                {todo.title}
+              </span>
+              <button
+                className="bg-red-500 text-white text-sm px-2 py-1 rounded hover:bg-red-600"
+                onClick={() => deleteTodo(todo.id)}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4">
+          <input
+            className="w-full p-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+            value={newTodo}
+            onChange={e => setNewTodo(e.target.value)}
+            placeholder="Add a new todo"
+          />
+          <button
+            className="w-full mt-2 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+            onClick={addTodo}
+          >
+            Add Todo
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
