@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from pydantic import BaseModel
 from . import database
 
@@ -14,3 +14,4 @@ class Todo(database.Base):
 
   id = Column(Integer, primary_key=True, index=True)
   title = Column(String, index=True)
+  completed = Column(Boolean, default=False)

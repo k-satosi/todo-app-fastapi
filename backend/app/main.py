@@ -34,7 +34,7 @@ def create_todo(todo: models.TodoCreate, db: Session = Depends(database.get_db))
 
 @app.put("/todos/{todo_id}")
 def update_todo(todo_id: int, todo: models.TodoUpdate, db: Session = Depends(database.get_db)):
-  db_todo = models.db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+  db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
   if db_todo is None:
     raise HTTPException(status_code=404, detail="Todo not found")
 
