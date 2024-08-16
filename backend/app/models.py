@@ -5,6 +5,10 @@ from . import database
 class TodoCreate(BaseModel):
   title: str
 
+class TodoUpdate(BaseModel):
+  title: str
+  completed: bool
+
 class Todo(database.Base):
   __tablename__ = "todos"
 
