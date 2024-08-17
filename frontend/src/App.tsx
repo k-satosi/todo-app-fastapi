@@ -4,6 +4,8 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<{ id: number, title: string, completed: boolean, due_date?: string }[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [newDueDate, setNewDueDate] = useState("");
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editingTitle, setEditingTitle] = useState("");
   const url = "http://127.0.0.1:8000";
 
   useEffect(() => {
@@ -25,6 +27,21 @@ const App: React.FC = () => {
 
     setNewTodo("");
   };
+
+  const updateTodo = (id: number) => {
+    fetch(`${url}/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: editingTitle }),
+    })
+    .then(response => response.json())
+    .then(updatedTodo => {
+      setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo ));
+      setEditingTodoId(null);
+    })
+  }
 
   const toggleComplete = (id: number, completed: boolean) => {
     fetch(`${url}/todos/${id}`, {
@@ -67,25 +84,60 @@ const App: React.FC = () => {
         <ul className="space-y-2">
           {todos.map(todo => (
             <li key={todo.id} className={`flex justify-between item-center p-2 rounded-lg ${isDueSoon(todo.due_date) ? 'bg-yellow-100' : 'bg-gray-50'}`}>
-              <div>
-                <span
-                  className={`text-lg ${todo.completed ? "line-through text-gray-400" : "text-gray-800"} cursor-pointer`}
-                  onClick={() => toggleComplete(todo.id, todo.completed)}
-                >
-                  {todo.title}
-                </span>
-                {todo.due_date && (
-                  <div className="text-sm text-gray-600">
-                    Due: {new Date(todo.due_date).toLocaleDateString()}
+              {editingTodoId === todo.id ? (
+                <>
+                  <input
+                    className="text-lg text-gray-800 flex-grow p-1 border-b border-gray-300 focus:outline-none"
+                    value={editingTitle}
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                  />
+                  <button
+                    className="ml-2 bg-blue-500 text-white text-sm px-2 py-1 rounded hover:bg-blue-600"
+                    onClick={() => updateTodo(todo.id)}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="ml-2 bg-gray-500 text-white text-sm px-2 py-1 rounded hover:bg-gray-600"
+                    onClick={() => setEditingTodoId(null)}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <span
+                      className={`text-lg ${todo.completed ? "line-through text-gray-400" : "text-gray-800"} cursor-pointer`}
+                      onClick={() => toggleComplete(todo.id, todo.completed)}
+                    >
+                      {todo.title}
+                    </span>
+                    {todo.due_date && (
+                      <div className="text-sm text-gray-600">
+                       Due: {new Date(todo.due_date).toLocaleDateString()}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <button
-                className="bg-red-500 text-white text-sm px-2 py-1 rounded hover:bg-red-600"
-                onClick={() => deleteTodo(todo.id)}
-              >
-                Delete
-              </button>
+                  <div>
+                    <button
+                      className="ml-2 bg-yellow-500 text-white text-sm px-2 py-1 rounded hover:bg-yellow-600"
+                      onClick={() => {
+                        setEditingTodoId(todo.id);
+                        setEditingTitle(todo.title);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="ml-2 bg-red-500 text-white text-sm px-2 py-1 rounded hover:bg-red-600"
+                      onClick={() => deleteTodo(todo.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
             </li>
           ))}
         </ul>
