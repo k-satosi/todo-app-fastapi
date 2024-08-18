@@ -1,0 +1,10 @@
+{
+  "title": "TODOリスト",
+  "addTodo": "TODOを追加",
+  "due": "期限",
+  "edit": "編集",
+  "delete": "削除",
+  "save": "保存",
+  "cancel": "キャンセル",
+  "placeholder": "新しいTODOを追加"
+}

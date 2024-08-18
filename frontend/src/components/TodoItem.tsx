@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface TodoItemProps {
   id: number;
@@ -11,6 +12,7 @@ interface TodoItemProps {
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ id, title, due_date, completed, onUpdate, onToggleComplete, onDelete }) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [editingTitle, setEditingTitle] = useState(title);
 
@@ -41,13 +43,13 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, due_date, completed, onU
             className="ml-2 bg-blue-500 text-white text-sm px-2 py-1 rounded hover:bg-blue-600"
             onClick={handleSave}
           >
-            Save
+            {t('save')}
           </button>
           <button
             className="ml-2 bg-gray-500 text-white text-sm px-2 py-1 rounded hover:bg-gray-600"
             onClick={() => setIsEditing(false)}
           >
-            Cancel
+            {t('cancel')}
           </button>
         </>
       ) : (
@@ -61,7 +63,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, due_date, completed, onU
             </span>
             {due_date && (
               <div className="text-sm text-gray-600">
-                Due: {new Date(due_date).toLocaleDateString()}
+                {t('due')}: {new Date(due_date).toLocaleDateString()}
               </div>
             )}
           </div>
@@ -73,13 +75,13 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, due_date, completed, onU
                 setEditingTitle(title);
               }}
             >
-              Edit
+              {t('edit')}
             </button>
             <button
               className="ml-2 bg-red-500 text-white text-sm px-2 py-1 rounded hover:bg-red-600"
               onClick={() => onDelete(id)}
             >
-              Delete
+              {t('delete')}
             </button>
           </div>
         </>

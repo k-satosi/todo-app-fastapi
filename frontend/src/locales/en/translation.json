@@ -1,0 +1,10 @@
+{
+  "title": "Todo List",
+  "addTodo": "Add Todo",
+  "due": "Due",
+  "edit": "Edit",
+  "delete": "Delete",
+  "save": "Save",
+  "cancel": "Cancel",
+  "placeholder": "Add a new todo"
+}

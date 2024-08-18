@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import TodoItem from "./components/TodoItem";
 
 const App: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [todos, setTodos] = useState<{ id: number, title: string, completed: boolean, due_date?: string }[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [newDueDate, setNewDueDate] = useState("");
@@ -66,10 +68,20 @@ const App: React.FC = () => {
     });
   };
 
+  const handleLanguageChange = (lng: string) => {
+    i18n.changeLanguage(lng);
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-5">
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Todo List</h1>
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('title')}</h1>
+          <div>
+            <button onClick={() => handleLanguageChange('en')} className="mr-2">English</button>
+            <button onClick={() => handleLanguageChange('ja')}>日本語</button>
+          </div>
+        </div>
         <ul className="space-y-2">
           {todos.map(todo => (
             <TodoItem
@@ -89,7 +101,7 @@ const App: React.FC = () => {
             className="w-full p-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 mb-2"
             value={newTodo}
             onChange={e => setNewTodo(e.target.value)}
-            placeholder="Add a new todo"
+            placeholder={t('placeholder')}
           />
           <input
             type="date"
@@ -101,7 +113,7 @@ const App: React.FC = () => {
             className="w-full mt-2 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
             onClick={addTodo}
           >
-            Add Todo
+            {t('addTodo')}
           </button>
         </div>
       </div>
